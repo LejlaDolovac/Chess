@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Chessboard </title>
+<link type="text/css" rel="stylesheet" href= "horse.css" /> 
+</head>
+<body>
+
+<table id="chessboard">
+
+</table>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" charset="utf-8"></script>          
+
+<script>
+
+// chessboard
+for (var r=8; r>0; r--) {
+  var col = "";
+  for (var c=0; c<8; c++) { 
+    col += "<td id='"+(c+1)+'_'+r+"' onClick='Horse("+'"'+(c+1)+'_'+r+'"'+");'></td>";
+  }
+  $("#chessboard").append("<tr>"+col+"</tr>");
+}
+
+
+// detta gör så att hästen visar färg( inline-style ) när den står på en ruta , runt hästen visas färgen grön och dom färgerna visar vart hästen kan gå
+function changeColor(cell, isHorse) {
+    if(isHorse) {
+        document.getElementById(cell).style.backgroundColor = 'red';
+    } else {
+        document.getElementById(cell).style.backgroundColor = 'green';
+    }
+}
+
+// Detta är hästen
+
+function Horse(cell) {
+    for (var r=8; r>0; r--) {
+         for (var c=0; c<8; c++) {
+            document.getElementById((c+1)+'_'+r).style = '';
+        }
+    }
+
+    var possibleCoordinates = [];
+    //var xCoordinates = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    var cellX = parseInt(cell[0]); // X Position    
+    var cellY = parseInt(cell[2]); // Y Position   
+
+    changeColor(cellX +'_'+ cellY, true);
+    // Detta är x-positionen , här kan den gå åt höger håll
+    var cellXpositions = 
+      [cellX + 2,
+      cellX - 2,
+      cellX + 1,
+      cellX - 1].filter(function(cellPosition) {
+        return (cellPosition > 0 && cellPosition < 9);
+    })
+    
+    //Detta är alla y-positioner , här kan den gå åt vänster håll
+    var cellYpositions = [cellY + 2,
+      cellY - 2,
+      cellY + 1,
+      cellY - 1].filter(function(cellPosition) {
+        return (cellPosition > 0 && cellPosition < 9 );
+    })
+    
+    
+    
+
+      //Here I get the cells that the horse can go on
+    //  We now have two arrays, one decides where X is allowed to be and the other where Y is allowed to be.
+
+    for (var i = 0; i < cellXpositions.length; i++) {
+    for (var j = 0; j < cellYpositions.length; j++) {
+       if (Math.abs(cellX - cellXpositions[i]) + Math.abs(cellY - cellYpositions[j]) === 3) {
+        changeColor(cellXpositions[i]+'_'+cellYpositions[j]);
+       if (!possibleCoordinates.includes([cellXpositions[i], cellYpositions[j]])) {
+        possibleCoordinates.push([cellXpositions[i], cellYpositions[j]]);
+    } 
+     }
+    }
+     }
+       console.log('Possible Coordinates:', possibleCoordinates);
+       console.log ('Possible Moves:', possibleCoordinates.length);
+    return possibleCoordinates.length;
+}
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
+
