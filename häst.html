@@ -21,13 +21,14 @@
 for (var r=8; r>0; r--) {
   var col = "";
   for (var c=0; c<8; c++) { 
+       // Adds a cell with an unique ID that will change the color  
     col += "<td id='"+(c+1)+'_'+r+"' onClick='Horse("+'"'+(c+1)+'_'+r+'"'+");'></td>";
   }
   $("#chessboard").append("<tr>"+col+"</tr>");
 }
 
 
-// detta gör så att hästen visar färg( inline-style ) när den står på en ruta , runt hästen visas färgen grön och dom färgerna visar vart hästen kan gå
+// detta gör så att hästen visar färg( inline-style ) när den står på en ruta , runt hästen visas färgen grön och det säger vart hästen kan gå
 function changeColor(cell, isHorse) {
     if(isHorse) {
         document.getElementById(cell).style.backgroundColor = 'red';
@@ -36,7 +37,6 @@ function changeColor(cell, isHorse) {
     }
 }
 
-// Detta är hästen
 
 function Horse(cell) {
     for (var r=8; r>0; r--) {
@@ -46,13 +46,13 @@ function Horse(cell) {
     }
 
     var possibleCoordinates = [];
-    //var xCoordinates = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    var xCoordinates = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];// this array converts letters to numbers
     var cellX = parseInt(cell[0]); // X Position    
     var cellY = parseInt(cell[2]); // Y Position   
 
-    changeColor(cellX +'_'+ cellY, true);
-    // Detta är x-positionen , här kan den gå åt höger håll
-    var cellXpositions = 
+    changeColor(cellX +'_'+ cellY, true); // we call the function to change the color to red if its true
+    
+    var cellXpositions =  //check where the horse is in x-angle
       [cellX + 2,
       cellX - 2,
       cellX + 1,
@@ -60,14 +60,16 @@ function Horse(cell) {
         return (cellPosition > 0 && cellPosition < 9);
     })
     
-    //Detta är alla y-positioner , här kan den gå åt vänster håll
-    var cellYpositions = [cellY + 2,
-      cellY - 2,
-      cellY + 1,
-      cellY - 1].filter(function(cellPosition) {
-        return (cellPosition > 0 && cellPosition < 9 );
-    })
+    // check where the horse is in y-angle
     
+    var cellYpositions = [
+    cellY + 2,
+    cellY - 2,
+    cellY + 1,
+    cellY - 1
+    ].filter(function(cellPosition) {
+        return (cellPosition > 0 && cellPosition < 9);
+    })
     
     
 
@@ -77,6 +79,7 @@ function Horse(cell) {
     for (var i = 0; i < cellXpositions.length; i++) {
     for (var j = 0; j < cellYpositions.length; j++) {
        if (Math.abs(cellX - cellXpositions[i]) + Math.abs(cellY - cellYpositions[j]) === 3) {
+        console.log([xCoordinates[cellXpositions[i]-1], cellYpositions[j]]); // here we console.log positions that passes through our validation
         changeColor(cellXpositions[i]+'_'+cellYpositions[j]);
        if (!possibleCoordinates.includes([cellXpositions[i], cellYpositions[j]])) {
         possibleCoordinates.push([cellXpositions[i], cellYpositions[j]]);
